@@ -12,3 +12,22 @@ app.get('/', (req, res) => {
         message: 'Welcome to the API',
     });
 });
+
+app.post('/api/rovers',(req,res)=>{
+    try{
+        const { input }=req.body;
+        if(!input ||typeof input!=='string'){
+            return res.status(400).json({
+                status:'fail',
+                message:'Input is required',
+            })
+        }
+        const parsed = parseInput(input);
+        const results = [];
+        const occupiedPositions = new Set();
+        
+
+    }catch(error){
+        
+    }
+})
