@@ -22,3 +22,17 @@ function moveForward(x,y,facing, plateau, occupiedPositions){
     }
     return {x:nx, y:ny}
 }
+
+function runRover(rover, plateau, occupiedPositions=new Set()){
+    let {x,y,facing}=rover;
+    for (cmd of rover.instructions){
+        if(cmd==='L') facing=turnLeft(facing);
+        else if(cmd==='R') facing=turnRight(facing);
+        else if(cmd==='M'){
+            const pos = moveForward(x,y,facing,plateau, occupiedPositions)
+            x=pos.x;
+            y=pos.y;
+        }
+    }
+    return {x,y,facing}
+}
