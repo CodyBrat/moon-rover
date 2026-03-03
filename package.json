@@ -2,10 +2,11 @@
   "name": "moon-rover",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "start": "node app.js",
-    "test": "jest"
-  },
+"scripts": {
+  "start": "node server.js",
+  "dev": "node server.js",
+  "test": "jest --verbose"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
