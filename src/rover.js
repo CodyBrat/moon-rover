@@ -36,3 +36,4 @@ function runRover(rover, plateau, occupiedPositions=new Set()){
     }
     return {x,y,facing}
 }
+module.exports = { runRover }
