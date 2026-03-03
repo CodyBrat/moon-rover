@@ -1,7 +1,5 @@
 # Moon Rover Navigation API
 
-A REST API to navigate robotic rovers on a rectangular plateau on the Moon. Built as part of the **Digital Back Office Backend Developer Internship Assignment**.
-
 ## The Problem
 
 Rovers are deployed on a rectangular plateau and controlled via a string of instructions:
