@@ -1,5 +1,6 @@
 # Moon Rover Navigation API
 
+A REST API to navigate robotic rovers on a rectangular plateau on the Moon.
 ## The Problem
 
 Rovers are deployed on a rectangular plateau and controlled via a string of instructions:
@@ -8,6 +9,8 @@ Rovers are deployed on a rectangular plateau and controlled via a string of inst
 
 Each rover completes its full path before the next one starts.
 
+---
+
 ## Tech Stack
 
 - **Node.js + Express** — REST API
@@ -15,7 +18,10 @@ Each rover completes its full path before the next one starts.
 - **Morgan** — request logging
 - **dotenv** — environment config
 
+---
+
 ## Project Structure
+
 ```
 moon-rover/
 ├── src/
@@ -25,12 +31,17 @@ moon-rover/
 ├── tests/
 │   ├── rover.test.js   # unit tests
 │   └── api.test.js     # API integration tests
+├── public/
+│   └── index.html      # simple frontend UI
 ├── app.js              # express app
 ├── server.js           # server entry point
 └── .env
 ```
 
+---
+
 ## Setup
+
 ```bash
 npm install
 npm start
@@ -38,12 +49,19 @@ npm start
 
 Server runs on `http://localhost:3000`
 
+Open `http://localhost:3000` in your browser to use the frontend UI.
+
+---
+
 ## Run Tests
+
 ```bash
 npm test
 ```
 
 10 tests — all passing
+
+---
 
 ## API
 
@@ -62,6 +80,7 @@ Health check.
 ---
 
 ### `POST /api/rovers`
+
 Send plateau size and rover instructions, get final positions back.
 
 **Request:**
@@ -75,12 +94,12 @@ Send plateau size and rover instructions, get final positions back.
 ```
 5 5          ← plateau upper-right coordinates
 1 2 N        ← rover starting position (x, y, direction)
-LMLMLMLMM   ← movement instructions
+LMLMLMLMM   ← movement instructions (L, R, M only)
 3 3 E
 MMRMMRMRRM
 ```
 
-**Response:**
+**Success response:**
 ```json
 {
   "success": true,
@@ -96,9 +115,12 @@ MMRMMRMRRM
 }
 ```
 
+---
+
 ## Features
 
 - Handles multiple rovers sequentially
 - Boundary detection — rovers can't move outside the plateau
 - Collision detection — rovers can't occupy the same cell
 - Descriptive error messages for bad input
+- Simple frontend UI for easy testing
