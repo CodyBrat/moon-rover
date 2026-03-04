@@ -12,6 +12,10 @@ app.use(express.static('public'));
 
 
 app.get('/', (req, res) => {
+    res.status(200).json({
+        success:true,
+        message:'Welcome to the Mars Rover API!',
+    })
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
