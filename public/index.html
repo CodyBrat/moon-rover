@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Moon Rover API</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: monospace;
+      background: #f5f5f5;
+      color: #222;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 32px;
+      width: 100%;
+      max-width: 480px;
+    }
+    h1 { font-size: 1rem; font-weight: bold; margin-bottom: 4px; }
+    .sub { font-size: 0.75rem; color: #888; margin-bottom: 24px; }
+    label { font-size: 0.75rem; color: #555; display: block; margin-bottom: 6px; }
+    textarea {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      resize: vertical;
+      min-height: 150px;
+      outline: none;
+      color: #222;
+    }
+    textarea:focus { border-color: #888; }
+    .hint { font-size: 0.7rem; color: #aaa; margin-top: 6px; margin-bottom: 16px; }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #222;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    button:hover { background: #444; }
+    button:disabled { background: #aaa; cursor: not-allowed; }
+    .result {
+      margin-top: 20px;
+      border-top: 1px solid #eee;
+      padding-top: 16px;
+    }
+    .result-label { font-size: 0.7rem; color: #888; margin-bottom: 8px; }
+    .result-line {
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 6px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .result-line:last-child { border-bottom: none; }
+
+    .error { font-size: 0.8rem; color: #c0392b; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>Moon Rover API</h1>
+  <label>Mission Input</label>
+  <textarea id="input" placeholder="5 5&#10;1 2 N&#10;LMLMLMLMM&#10;3 3 E&#10;MMRMMRMRRM"></textarea>
+  <p class="hint">Line 1: plateau size &nbsp;|&nbsp; Then: position + instructions per rover</p>
+  <button id="btn"onclick="submit()">Run</button>
+  <div class="result" id="result" style="display:none"></div>
+</div>
+<script>
+  async function submit() {
+    const input = document.getElementById('input').value.trim();
+    const btn = document.getElementById('btn');
+    const result = document.getElementById('result');
+
+    if (!input) return;
+    btn.disabled = true;
+    btn.textContent = 'Running...';
+    result.style.display = 'none';
+
+    try {
+      const res = await fetch('/api/rovers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input })
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        result.innerHTML = `<p class="result-label">Error</p><p class="error">${data.error}</p>`;
+      } else {
+        const lines = data.output.map((pos, i) =>
+          `<div class="result-line">Rover ${i + 1}: ${pos}</div>`
+        ).join('');
+        result.innerHTML = `<p class="result-label">Final Positions</p>${lines}`;
+      }
+
+      result.style.display = 'block';
+    } catch (e) {
+      result.innerHTML = `<p class="error">Could not connect to server.</p>`;
+      result.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Run';
+    }
+  }
+</script>
+</body>
+</html>

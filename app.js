@@ -3,20 +3,16 @@ const morgan = require('morgan');
 const { parseInput } = require('./src/parser');
 const { validate } = require('./src/validator');
 const { runRover } = require('./src/rover');
-const { version } = require('node:os');
-const { OutputFileType } = require('typescript');
+const path = require('path');
 
 const app= express();
 app.use(express.json());
 app.use(morgan('dev'));
+app.use(express.static('public'));
 
 
 app.get('/', (req, res) => {
-    res.status(200).json({
-        status:'ok',
-        message: 'Moon Rover API',
-        version: '1.0.0',
-    });
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.post('/api/rovers',(req,res)=>{
